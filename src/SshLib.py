@@ -45,9 +45,9 @@ class SshConnection(object):
 			stdin.write(password+"\n")
 			stdin.flush()
 		stdin.close()
-		for line in stdout.readlines():
+		for line in stdout:
 			print line.strip()
-		for line in stderr.readlines():
+		for line in stderr:
 			print line.strip()
 		exit_code =stdout.channel.recv_exit_status() 
 		return exit_code
