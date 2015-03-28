@@ -1,9 +1,11 @@
 import requests
 from requests.exceptions import ConnectionError
+from SshLib import SshConnection
 import json
 import paramiko
 import time
 import os
+import SshLib
 
 DO_REGION='nyc3'
 DO_IMAGE='ubuntu-14-04-x64'
@@ -28,7 +30,6 @@ def createKeyInDo():
 		print "Error: Unable to Connect to Digital Ocean"
 		exit()
 
-	print response.text
 	response = json.loads(response.text)
 	print response['ssh_key']['id']
 	#exit()
@@ -51,7 +52,8 @@ def addPublicKeytoDO():
 			exit()
 		response=json.loads(response.text)
 		for i in response["ssh_keys"]:
-			if i["public_key"]==DO_PUBLICKEY:
+			if i["public_key"].encode('ascii','ignore').strip()==DO_PUBLICKEY.encode('ascii','ignore').strip():
+				print "Key already present in DigitalOcean"
 				DO_PUBLICKEYID=i["id"]
 				return
 		#if key not found, add it to the list in Digital Ocean
@@ -62,7 +64,7 @@ def addPublicKeytoDO():
 			print "Error: Unable to Connect to Digital Ocean"
 			exit()
 		response=json.loads(response.text)
-		#print response
+		print response
 		DO_PUBLICKEYID=response["ssh_key"]["id"]
 
 def setPublicKey():
@@ -114,6 +116,8 @@ class Droplet(object):
 		else:
 			return False
 
+	def getConnection(self):
+		return SshConnection(self.ip,"root",useKey=True)
 
 if __name__=='__main__':
 	initDO()
@@ -123,3 +127,7 @@ if __name__=='__main__':
 		print "Waiting for VM to boot..."
 		time.sleep(5)
 	print "VM is active"
+	time.sleep(10)
+	con=d.getConnection()
+	con.run("pwd")
+	con.run("cat ~/.ssh/known_hosts")
