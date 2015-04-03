@@ -9,7 +9,7 @@ import SshLib
 
 DO_REGION='nyc3'
 DO_IMAGE='ubuntu-14-04-x64'
-DO_AUTHKEY='f414f89482ce1a12ee202c24c06111876bb0cc62f5129023c1be98717f0483b4'
+DO_AUTHKEY=''
 DO_APIHOST='https://api.digitalocean.com/v2/'
 DO_PUBLICKEY=None
 DO_PUBLICKEYID=None
@@ -130,4 +130,3 @@ if __name__=='__main__':
 	time.sleep(10)
 	con=d.getConnection()
 	con.run("pwd")
-	con.run("cat ~/.ssh/known_hosts")
