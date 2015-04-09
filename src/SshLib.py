@@ -57,5 +57,26 @@ class SshConnection(object):
 		#if exit_code!=0:
 		#	exit()
 
+	def run_shell(self,command,password=None):
+		channel=self.ssh.invoke_shell()
+		if password==None:
+			get_pty=False
+		else:
+			get_pty=True
+		print "Running command: "+command
+		stdin,stdout,stderr = channel.exec_command(command)
+		if password!=None:
+			stdin.write(password+"\n")
+			stdin.flush()
+		stdin.close()
+		for line in stdout:
+			print line.strip()
+		for line in stderr:
+			print line.strip()
+		exit_code =stdout.channel.recv_exit_status() 
+		return exit_code
+		#if exit_code!=0:
+		#	exit()
+
 	def close(self):
 		self.ssh.close()
