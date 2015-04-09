@@ -1,5 +1,3 @@
-
-
 class Configuration(object):
 	_map={}
 	DO_requiredValues=["DO_REGION","DO_IMAGE","DO_AUTHKEY","DO_APIHOST"]

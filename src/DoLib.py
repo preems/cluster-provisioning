@@ -8,10 +8,7 @@ import os
 import SshLib
 from config import Configuration
 
-#DO_REGION='nyc3'
-#DO_IMAGE='ubuntu-14-04-x64'
-DO_AUTHKEY='098aaa24c0ba7e4bfc8b03c6110b207f36df91e02741084575ab21616f3b425e'
-#DO_APIHOST='https://api.digitalocean.com/v2/'
+
 DO_PUBLICKEY=None
 DO_PUBLICKEYID=None
 
