@@ -130,6 +130,9 @@ class Droplet(object):
 	def getConnection(self):
 		return SshConnection(self.ip,"root",useKey=True)
 
+	def getIP(self):
+		return self.ip
+
 if __name__=='__main__':
 	conf = Configuration("cat.conf")
 	initDO(conf)
