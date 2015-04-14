@@ -1,5 +1,5 @@
 from config import Configuration
-from DoLib import Droplet
+from DoLib import Droplet,initDO
 from SshLib import SshConnection
 from AWSLib import AWSInstance
 from HadoopLib import installHadoop
@@ -51,6 +51,7 @@ if __name__=="__main__":
 		Cloud.provider=OpenStackInstance
 
 	if args.app=='hadoop':
+		intiDo(conf)
 		instances=[]
 		print "Creating ",args.nodes," instances on ",args.provider,"....."
 		for i in range(args.nodes):

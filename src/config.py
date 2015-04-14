@@ -24,7 +24,7 @@ class Configuration(object):
 		for i in requiredValues:
 			if i not in self._map:
 				return False
-			elif self._map[key]=="" or self._map[key]==None:
+			elif self._map[i]=="" or self._map[i]==None:
 				return False
 		return True
 

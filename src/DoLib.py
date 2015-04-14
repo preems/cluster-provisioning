@@ -91,10 +91,15 @@ class Droplet(object):
 		except ConnectionError:
 			print "Error: Unable to Connect to Digital Ocean"
 			exit()
-		#print response.text
-		response = json.loads(response.text)
-		self.id=response['droplet']['id']
-		self.status=response['droplet']['status']
+
+		try:
+			response = json.loads(response.text)
+			self.id=response['droplet']['id']
+			self.status=response['droplet']['status']
+		except:
+			print "Error: Creation of droplet in Digital Ocean failed"
+			print response
+			exit()
 
 		while True:
 			time.sleep(1)
