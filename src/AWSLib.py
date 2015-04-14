@@ -46,8 +46,9 @@ class AWSInstance(object):
 if __name__=='__main__':
     conf = Configuration("cat.conf")
     ins = AWSInstance(conf)
-    time.sleep(70)
+    time.sleep(5)
     print ins.fetchIp()
+    time.sleep(70)
     con = ins.getConnection()
     #con = SshConnection("ec2-54-149-108-32.us-west-2.compute.amazonaws.com","ubuntu",useKey=True)
     con.run("pwd")
