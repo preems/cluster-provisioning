@@ -51,7 +51,7 @@ if __name__=="__main__":
 		Cloud.provider=OpenStackInstance
 
 	if args.app=='hadoop':
-		intiDo(conf)
+		initDO(conf)
 		instances=[]
 		print "Creating ",args.nodes," instances on ",args.provider,"....."
 		for i in range(args.nodes):
@@ -60,7 +60,13 @@ if __name__=="__main__":
 			print "Instance created with ip/hostname ",instances[-1].fetchIp()
 
 		print "Waiting for all the instances to boot..."
-		time.sleep(70)
+		time.sleep(60)
+
+		while True:
+			if instances[-1].isActive(conf):
+				break
+			time.sleep(5)
+		time.sleep(10)
 
 		master=instances[0].getConnection()
 		slaves=[]

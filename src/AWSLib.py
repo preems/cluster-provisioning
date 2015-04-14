@@ -39,6 +39,9 @@ class AWSInstance(object):
     def  getIp(self):
         return self.ip
 
+    def isActive(self,conf):
+        return True
+
     def getConnection(self):
         return SshConnection(self.ip,"ubuntu",useKey=True)
 

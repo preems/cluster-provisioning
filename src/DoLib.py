@@ -37,8 +37,8 @@ def addPublicKeytoDO(conf):
 	if DO_PUBLICKEY==None:
 		setPublicKey()
 
-	#headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+conf.get("DO_AUTHKEY")}
-	headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+DO_AUTHKEY}
+	headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+conf.get("DO_AUTHKEY")}
+	#headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+DO_AUTHKEY}
 
 	if DO_PUBLICKEYID==None:
 		#Check weather the key is already added to the DO
@@ -114,7 +114,7 @@ class Droplet(object):
 				break
 		self.ip=response['droplet']['networks']['v4'][0]['ip_address']
 
-	def isActive(self):
+	def isActive(self,conf):
 		try:
 			response = requests.get(conf.get("DO_APIHOST")+'droplets/'+str(self.id),headers=self.headers)
 		except ConnectionError:

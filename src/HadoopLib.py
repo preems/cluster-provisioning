@@ -137,7 +137,7 @@ def updateHostsFile(con, type="master", master=None, slaves=None):
 
     con.run('echo "sshd: ALL" >> /etc/hosts.allow')
 
-def installHadoop(master,slaves):
+def installHadoop(master,slaves,conf):
     masterIP = master.host
     slavesIP = []
     for i in range(len(slaves)):
