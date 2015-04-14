@@ -12,12 +12,6 @@ from config import Configuration
 DO_PUBLICKEY=None
 DO_PUBLICKEYID=None
 
-#TODO Get Authkey from config class
-
-
-ramSizeToDoSizeMap={}
-ramSizeToDoSizeMap[512]='512mb'
-ramSizeToDoSizeMap[1024]='1gb'
 
 """
 def createKeyInDo():
@@ -83,9 +77,9 @@ def setPublicKey():
 class Droplet(object):
 
 
-	def __init__(self,size,conf):
+	def __init__(self,conf):
 		self.ip=None
-		self.size=ramSizeToDoSizeMap[size]
+		self.size=conf.get("DO_INSTANCE_TYPE")
 		self.id=None
 		self.sshKeyId=DO_PUBLICKEYID
 		self.headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+conf.get("DO_AUTHKEY")}
@@ -127,6 +121,10 @@ class Droplet(object):
 		else:
 			return False
 
+	def fetchIp(self):
+		if self.ip!=None:
+			return self.ip
+
 	def getConnection(self):
 		return SshConnection(self.ip,"root",useKey=True)
 
@@ -136,7 +134,7 @@ class Droplet(object):
 if __name__=='__main__':
 	conf = Configuration("cat.conf")
 	initDO(conf)
-	d=Droplet(512,conf)
+	d=Droplet(conf)
 	print "Created a VM with id ",d.id," and IP address ",d.ip," and SSH key id",d.sshKeyId
 	while not d.isActive():
 		print "Waiting for VM to boot..."
