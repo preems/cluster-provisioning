@@ -42,7 +42,7 @@ class SshConnection(object):
 			get_pty=False
 		else:
 			get_pty=True
-		print "Running command: "+command
+		print "Running command on "+self.host+": "+command
 		stdin,stdout,stderr = self.ssh.exec_command(command,get_pty=get_pty)
 		if password!=None:
 			stdin.write(password+"\n")
