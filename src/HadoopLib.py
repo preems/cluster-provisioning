@@ -10,6 +10,7 @@ def performHadoopOperations(con,type,master=None,slaves=None):
     sshCommandString = "ssh -o StrictHostKeyChecking=no -t "
 
     hadoopCon = SshConnection(con.host, hadoopUser, password=HADOOP_USER_PASSWORD)
+    hadoopCon.connect()
     hadoopCon.run('echo -e "\n" | ssh-keygen -t rsa -P ""')
     hadoopCon.run('cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys')
     if type == "master":
@@ -54,6 +55,8 @@ def performHadoopOperations(con,type,master=None,slaves=None):
         hadoopCon.run('/usr/lib/jvm/java-6-openjdk-amd64/bin/jps')
         # hadoopCon.run('$HOME/hadoop/sbin/stop-dfs.sh', password="yes")
         # hadoopCon.run('$HOME/hadoop/sbin/stop-yarn.sh', password="yes")
+
+    hadoopCon.close()
 
 def updateHadoopConfigurationFiles(hadoopCon, noOfReplications=2):
     ######Modify XML and config files of Hadoop
@@ -105,6 +108,7 @@ def performRootoperations(con, type=type, master=None, slaves=None):
     DOUBLE_PASSWORD = HADOOP_USER_PASSWORD+"\n"+HADOOP_USER_PASSWORD+"\n"
     hadoopUser = "hduser"
 
+    con.connect()
     con.run("sudo apt-get update")
     con.run("sudo apt-get -y install python-software-properties")
     con.run("sudo add-apt-repository ppa:ferramroberto/java")
@@ -118,6 +122,7 @@ def performRootoperations(con, type=type, master=None, slaves=None):
         con.run("sudo apt-get -y install expect")
 
     updateHostsFile(con, type=type, master=master, slaves=slaves)
+    con.close()
 
 def updateHostsFile(con, type="master", master=None, slaves=None):
     if type == "master":
