@@ -2,17 +2,23 @@ import paramiko
 import os
 
 class SshConnection(object):
-	ssh = paramiko.client.SSHClient()
+	
 
 	def __init__(self,host,user,password=None,useKey=False):
+		self.ssh = paramiko.client.SSHClient()
 		self.host=host
 		self.user = user
 		self.password = password
 		self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+		self.useKey=useKey
+
+
+	def connect():
 		if useKey==False:
 			self.ssh.connect(host,username=self.user,password=self.password)
 		else:
 			self.ssh.connect(host,username=self.user,key_filename=os.environ['HOME']+"/.ssh/id_rsa")
+
 
 	def run_old(self,command,password=None):
 		channel = self.ssh.get_transport().open_session()

@@ -60,7 +60,7 @@ if __name__=="__main__":
 			print "Instance created with ip/hostname ",instances[-1].fetchIp()
 
 		print "Waiting for all the instances to boot..."
-		time.sleep(60)
+		time.sleep(90)
 
 		while True:
 			if instances[-1].isActive(conf):
