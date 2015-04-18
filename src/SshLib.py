@@ -2,7 +2,7 @@ import paramiko
 import os
 
 class SshConnection(object):
-	
+
 
 	def __init__(self,host,user,password=None,useKey=False):
 		self.ssh = paramiko.client.SSHClient()
@@ -13,11 +13,11 @@ class SshConnection(object):
 		self.useKey=useKey
 
 
-	def connect():
-		if useKey==False:
-			self.ssh.connect(host,username=self.user,password=self.password)
+	def connect(self):
+		if self.useKey==False:
+			self.ssh.connect(self.host,username=self.user,password=self.password)
 		else:
-			self.ssh.connect(host,username=self.user,key_filename=os.environ['HOME']+"/.ssh/id_rsa")
+			self.ssh.connect(self.host,username=self.user,key_filename=os.environ['HOME']+"/.ssh/id_rsa")
 
 
 	def run_old(self,command,password=None):
@@ -58,7 +58,7 @@ class SshConnection(object):
 			print line.strip()
 		for line in stderr:
 			print line.strip()
-		exit_code =stdout.channel.recv_exit_status() 
+		exit_code =stdout.channel.recv_exit_status()
 		return exit_code
 		#if exit_code!=0:
 		#	exit()
@@ -79,7 +79,7 @@ class SshConnection(object):
 			print line.strip()
 		for line in stderr:
 			print line.strip()
-		exit_code =stdout.channel.recv_exit_status() 
+		exit_code =stdout.channel.recv_exit_status()
 		return exit_code
 		#if exit_code!=0:
 		#	exit()

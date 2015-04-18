@@ -14,5 +14,5 @@ print response.text
 response = json.loads(response.text)
 
 for droplets in response['droplets']:
-	res = requests.delete(conf.get("DO_APIHOST")+'droplets/'+droplets['id'])
+	res = requests.delete(conf.get("DO_APIHOST")+'droplets/'+str(droplets['id']))
 	print res

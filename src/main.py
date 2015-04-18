@@ -66,7 +66,7 @@ if __name__=="__main__":
 			if instances[-1].isActive(conf):
 				break
 			time.sleep(5)
-		time.sleep(10)
+		time.sleep(30)
 
 		master=instances[0].getConnection()
 		slaves=[]
@@ -80,12 +80,3 @@ if __name__=="__main__":
 		print "Name Node: ",master.host
 		for i in slaves:
 			print "Data Node:",i.host
-
-
-
-
-
-
-
-
-
