@@ -30,6 +30,24 @@ def initConfig():
 		print "Error: Please enter all required values for Amazon AWS"
 	return conf
 
+def createInstances(nodes,CloudProvider,providerName,conf):
+	instances=[]
+	print "Creating ",nodes," instances on ",providerName,"....."
+	for i in range(nodes):
+		instances.append(CloudProvider(conf))
+		time.sleep(5)
+		print "Instance created with ip/hostname ",instances[-1].fetchIp()
+
+	print "Waiting for all the instances to boot..."
+	time.sleep(90)
+
+	while True:
+		if instances[-1].isActive(conf):
+			break
+		time.sleep(5)
+	time.sleep(30)
+	return instances
+
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description='Automates provisioning of Hadoop and MongoDB clusters on platforms like Digital Ocean, Amazon Web Services and Open Stack')
 	parser.add_argument('--nodes',dest='nodes',default=1,type=int,help="Number of nodes in the cluster. Default is 1")
@@ -45,29 +63,22 @@ if __name__=="__main__":
 
 	if args.provider=='digitalocean':
 		CloudProvider=Droplet
+		initDO(conf)
 	elif args.provider=='aws':
 		CloudProvider=AWSInstance
 	elif args.provider=='openstack':
 		Cloud.provider=OpenStackInstance
 
+
+	instances=createInstances(args.nodes,CloudProvider,args.provider,conf)
+
+	if args.app=='none':
+		print "All VMs created and ready for use"
+		for i in instances:
+			print i.getIP()
+		exit()
+
 	if args.app=='hadoop':
-		initDO(conf)
-		instances=[]
-		print "Creating ",args.nodes," instances on ",args.provider,"....."
-		for i in range(args.nodes):
-			instances.append(CloudProvider(conf))
-			time.sleep(5)
-			print "Instance created with ip/hostname ",instances[-1].fetchIp()
-
-		print "Waiting for all the instances to boot..."
-		time.sleep(90)
-
-		while True:
-			if instances[-1].isActive(conf):
-				break
-			time.sleep(5)
-		time.sleep(30)
-
 		master=instances[0].getConnection()
 		slaves=[]
 		if args.nodes>1:
