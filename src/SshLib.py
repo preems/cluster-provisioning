@@ -63,6 +63,15 @@ class SshConnection(object):
 		#if exit_code!=0:
 		#	exit()
 
+	def spawn(self,command,password=None):
+		if password==None:
+			get_pty=False
+		else:
+			get_pty=True
+		print "Running command on "+self.host+": "+command
+		self.ssh.exec_command(command,get_pty=get_pty)
+
+
 	def run_shell(self,command,password=None):
 		channel=self.ssh.invoke_shell()
 		if password==None:
