@@ -3,6 +3,7 @@ class Configuration(object):
 	DO_requiredValues=["DO_REGION","DO_IMAGE","DO_AUTHKEY","DO_APIHOST"]
 	HADOOP_requiredValues=["HADOOP_USER_NAME","HADOOP_USER_PASSWORD"]
 	AWS_requiredValues=["AWS_REGION","AWS_ACCESS_KEY","AWS_SECRET_KEY","AWS_UBUNTU_AMI","AWS_INSTANCE_TYPE","AWS_SECURITY_GROUP"]
+	OpenStack_requiredValues=["OS_USERNAME","OS_PASSWORD","OS_TENANT_NAME","OS_AUTH_URL","IMAGE_NAME","FLAVOR_NAME","FLOATING_IP_POOL"]
 	def __init__(self,configfile="../cat.conf"):
 		with open(configfile) as cfile:
 			for line in cfile:
@@ -36,6 +37,9 @@ class Configuration(object):
 
 	def AWSValidate(self):
 		return self._validate(self.AWS_requiredValues)
+
+	def OpenStackValidate(self):
+		return self._validate(self.OpenStack_requiredValues)
 
 if __name__ == '__main__':
 	conf = Configuration("cat.conf")
