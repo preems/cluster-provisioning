@@ -1,4 +1,5 @@
 from SshLib import SshConnection
+import time
 
 def installMongoDB(masterCons, configCons, shardCons):
 	# con.run("sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10")
@@ -85,6 +86,9 @@ def installMongoDB(masterCons, configCons, shardCons):
 	shardJSFileContents += 'db.runCommand({enablesharding: \\"testDB\\"})\n'
 	shardJSFileContents += 'sh.shardCollection(\\"testDB.testData\\", {\\"name\\":1})\n'
 	shardJSFileContents += 'sh.status()\n'
+
+	print "Waiting for Config and shard servers to start..."
+	time.sleep(20)
 
 	for master in masterCons:
 		master.connect()
