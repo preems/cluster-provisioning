@@ -89,25 +89,28 @@ if __name__=="__main__":
 		installHadoop(master,slaves,conf)
 
 		print "*********************** Hadoop Installation Complete **************************"
-		print 
+		print
 		print "Hadoop Cluster Details:"
 		print "Name Node: ",master.host
 		for i in slaves:
 			print "Data Node:",i.host
 
-	if args.app=='mongo':
+	if args.app=='mongodb':
 		shard=[]
-		master = instances[0].getConnection()
-		config = instances[1].getConnection()
+		master = []
+		config =[]
+		master.append(instances[0].getConnection())
+		config.append(instances[1].getConnection())
+
 		for i in range(2,args.nodes):
 			shard.append(instances[i].getConnection())
 
-			installMongoDB(list().append(master),list().append(config),shard)
+			installMongoDB(master,config,shard)
 
-			print "*********************** Hadoop Installation Complete **************************"
+			print "*********************** MongoDB Installation Complete **************************"
 			print
 			print 'MongoDB Cluster Details:'
-			print "App node: "+master.host
-			print "Config node: "+config.host
+			print "App node: "+master[0].host
+			print "Config node: "+config[0].host
 			for i in shard:
 				print "Shard nodes: "+i.host
