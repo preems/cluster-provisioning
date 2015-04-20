@@ -84,7 +84,7 @@ class Droplet(object):
 		self.sshKeyId=DO_PUBLICKEYID
 		self.headers={'Content-Type':'application/json', 'Authorization': 'Bearer '+conf.get("DO_AUTHKEY")}
 
-		
+
 		data={'name':'example.com','region':conf.get("DO_REGION"),'size':self.size,'image':conf.get("DO_IMAGE"),'backups':'false','ipv6':'true','ssh_keys':[self.sshKeyId]}
 		try:
 			response = requests.post(conf.get("DO_APIHOST")+'droplets',data=json.dumps(data),headers=self.headers)
@@ -141,7 +141,7 @@ if __name__=='__main__':
 	initDO(conf)
 	d=Droplet(conf)
 	print "Created a VM with id ",d.id," and IP address ",d.ip," and SSH key id",d.sshKeyId
-	while not d.isActive():
+	while not d.isActive(conf):
 		print "Waiting for VM to boot..."
 		time.sleep(5)
 	print "VM is active"
