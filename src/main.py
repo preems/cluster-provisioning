@@ -105,12 +105,12 @@ if __name__=="__main__":
 		for i in range(2,args.nodes):
 			shard.append(instances[i].getConnection())
 
-			installMongoDB(master,config,shard)
+		installMongoDB(master,config,shard)
 
-			print "*********************** MongoDB Installation Complete **************************"
-			print
-			print 'MongoDB Cluster Details:'
-			print "App node: "+master[0].host
-			print "Config node: "+config[0].host
-			for i in shard:
-				print "Shard nodes: "+i.host
+		print "*********************** MongoDB Installation Complete **************************"
+		print
+		print 'MongoDB Cluster Details:'
+		print "App node: "+master[0].host
+		print "Config node: "+config[0].host
+		for i in shard:
+			print "Shard nodes: "+i.host
