@@ -97,7 +97,7 @@ def installMongoDB(masterCons, configCons, shardCons):
 		master.run('chmod 755 $HOME/addShard.js')
 		master.run('echo "' + shardJSFileContents + '" >> $HOME/addShard.js')
 		master.run('cat $HOME/addShard.js')
-		master.spawn('mongo ' + master.host + ':27020/admin ' + ' < $HOME/addShard.js &')
+		master.run('mongo ' + master.host + ':27020/admin ' + ' < $HOME/addShard.js &')
 		master.close()
 
 	# Setup config and shard server IPs in Master App server - END
