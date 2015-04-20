@@ -3,6 +3,7 @@ from DoLib import Droplet,initDO
 from SshLib import SshConnection
 from AWSLib import AWSInstance
 from HadoopLib import installHadoop
+from Mongo import installMongoDB
 import argparse
 import time
 
@@ -87,7 +88,26 @@ if __name__=="__main__":
 
 		installHadoop(master,slaves,conf)
 
+		print "*********************** Hadoop Installation Complete **************************"
+		print 
 		print "Hadoop Cluster Details:"
 		print "Name Node: ",master.host
 		for i in slaves:
 			print "Data Node:",i.host
+
+	if args.app=='mongo':
+		shard=[]
+		master = instances[0].getConnection()
+		config = instances[1].getConnection()
+		for i in range(2,args.nodes):
+			shard.append(instances[i].getConnection())
+
+			installMongoDB(list().append(master),list().append(config),shard)
+
+			print "*********************** Hadoop Installation Complete **************************"
+			print
+			print 'MongoDB Cluster Details:'
+			print "App node: "+master.host
+			print "Config node: "+config.host
+			for i in shard:
+				print "Shard nodes: "+i.host
