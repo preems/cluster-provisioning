@@ -22,18 +22,18 @@ class AWSInstance(object):
         except boto.exception.EC2ResponseError:
             print "Key already registered in Amazon"
 
-        #Creating Instance  
+        #Creating Instance
         print "Creating VM Instance..."
         reservation = self.conn.run_instances(conf.get("AWS_UBUNTU_AMI"), key_name='cat_key',instance_type=conf.get("AWS_INSTANCE_TYPE"), security_groups=[conf.get("AWS_SECURITY_GROUP")])
         self.reservation=reservation
         self.id=reservation.instances[0].id
         print self.id
-    
+
     def fetchIp(self):
         for r in self.conn.get_all_instances():
             if r.id == self.reservation.id:
                 break
-        self.ip = r.instances[0].public_dns_name 
+        self.ip = r.instances[0].ip_address
         return self.ip
 
     def  getIp(self):

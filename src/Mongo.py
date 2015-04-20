@@ -28,7 +28,9 @@ def installMongoDB(masterCons, configCons, shardCons):
 		config.run("sudo apt-get -y install build-essential")
 		config.run("sudo apt-get -y install mongodb")
 		config.run("sudo mkdir -p /data/db")
+		config.run("sudo chmod 777 -R /data/db")
 		config.run("sudo mkdir -p /data/configdb")
+		config.run("sudo chmod 777 -R /data/configdb")
 		configIPs.append(config.host)
 		config.close()
 
@@ -39,6 +41,7 @@ def installMongoDB(masterCons, configCons, shardCons):
 		shard.run("sudo apt-get -y install build-essential")
 		shard.run("sudo apt-get -y install mongodb")
 		shard.run("sudo mkdir -p /data/db")
+		shard.run("sudo chmod 777 -R /data/db")
 		shardIPs.append(shard.host)
 		shard.close()
 
