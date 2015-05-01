@@ -9,7 +9,7 @@ def performHadoopOperations(con,type,master=None,slaves=None):
     noOfReplications = 2
     sshCommandString = "ssh -o StrictHostKeyChecking=no -t "
 
-    hadoopCon = SshConnection(con.host, hadoopUser, password=HADOOP_USER_PASSWORD)
+    hadoopCon = SshConnection(con.host, hadoopUser, useKey=True)
     hadoopCon.connect()
     hadoopCon.run('echo -e "\n" | ssh-keygen -t rsa -P ""')
     hadoopCon.run('cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys')
@@ -117,6 +117,14 @@ def performRootoperations(con, type=type, master=None, slaves=None):
     con.run("java -version")
     con.run("sudo addgroup hadoop")
     con.run('echo -e "'+DOUBLE_PASSWORD+'" | sudo adduser --ingroup hadoop ' + hadoopUser)
+    #Add keys to Hadoop user: preems
+    con.run('sudo mkdir -p /home/'+hadoopUser+'/.ssh')
+    con.run('sudo cp .ssh/authorized_keys /home/'+hadoopUser+'/.ssh/')
+    con.run('sudo chmod  700 /home/'+hadoopUser+'/.ssh')
+    con.run('sudo chmod  600 /home/'+hadoopUser+'/.ssh/authorized_keys')
+    con.run('sudo chown  '+hadoopUser+":hadoop /home/"+hadoopUser+"/.ssh")
+    con.run('sudo chown  '+hadoopUser+":hadoop /home/"+hadoopUser+"/.ssh/authorized_keys")
+    #End add keys
     con.run('echo "JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64" >> /etc/environment')
     if type == "master":
         con.run("sudo apt-get -y install expect")
@@ -129,18 +137,18 @@ def updateHostsFile(con, type="master", master=None, slaves=None):
         if slaves is None:
             print "Please provide IP addresses of the slave machines"
             return
-        con.run('echo "' + con.host +'\tmaster" >> /etc/hosts')
+        con.run('sudo echo "' + con.host +'\tmaster" >> /etc/hosts')
         for i in range(len(slaves)):
             slaveName = "slave" + str(i)
-            con.run('echo "' + slaves[i] +'\t' + slaveName +'" >> /etc/hosts')
+            con.run('sudo echo "' + slaves[i] +'\t' + slaveName +'" >> /etc/hosts')
     else:
         if master is None:
             print "Please provide IP addresses of the master machine"
             return
-        con.run('echo "' + master +'\tmaster" >> /etc/hosts')
-        con.run('echo "' + con.host +'\t' + type +'" >> /etc/hosts')
+        con.run('sudo echo "' + master +'\tmaster" >> /etc/hosts')
+        con.run('sudo echo "' + con.host +'\t' + type +'" >> /etc/hosts')
 
-    con.run('echo "sshd: ALL" >> /etc/hosts.allow')
+    con.run('sudo echo "sshd: ALL" >> /etc/hosts.allow')
 
 def installHadoop(master,slaves,conf):
     masterIP = master.host

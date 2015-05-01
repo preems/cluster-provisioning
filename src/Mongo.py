@@ -88,7 +88,7 @@ def installMongoDB(masterCons, configCons, shardCons):
 	shardJSFileContents += 'sh.status()\n'
 
 	print "Waiting for Config and shard servers to start..."
-	time.sleep(20)
+	time.sleep(30)
 
 	for master in masterCons:
 		master.connect()
