@@ -30,6 +30,7 @@ class openStackInstance(object):
         self.novacredentials = self.get_nova_creds(conf)
         self.image_name = conf.get('IMAGE_NAME')
         self.flavor = conf.get('FLAVOR_NAME')
+        self.conf = conf
         print 'Attempting keystone authentication'
         self.keystoneobj = keystoneclient.Client(**self.keystonecredential)
         if self.keystoneobj.authenticate() == False:
@@ -109,50 +110,57 @@ class openStackInstance(object):
         if isIcmpRulePresent == False:
             self.novaobj.security_group_rules.create(self.novaobj.security_groups.find(name='default').id, ip_protocol='icmp', from_port=-1, to_port=-1)
 
-    def fetchIp(self,conf):
+    def fetchIp(self):
         self.createRules()
         isFloatingIpAssociated = False
         addresses = self.instance.addresses
         for eachpool in addresses.keys():
             for eachaddress in addresses[eachpool]:
-                print eachaddress
+                #print eachaddress
                 if eachaddress.has_key('OS-EXT-IPS:type'):
                     if eachaddress['OS-EXT-IPS:type'] == 'floating':
-                        print 'Already has associated floating ip!'
+                        #print 'Already has associated floating ip!'
                         isFloatingIpAssociated = True
                         self.ip = eachaddress['addr']
         if isFloatingIpAssociated == False:
-            floatingip = self.novaobj.floating_ips.create(pool=conf.get('FLOATING_IP_POOL'))
-            print floatingip,type(floatingip)
+            floatingip = self.novaobj.floating_ips.create(pool=self.conf.get('FLOATING_IP_POOL'))
+            #print floatingip,type(floatingip)
             self.instance = self.novaobj.servers.get(self.instance.id)
             self.instance.add_floating_ip(floatingip)
             self.ip = floatingip.to_dict()['ip']
+            self.rebootInstance()
+        return self.ip
     
     def getIp(self):
         return self.ip
 
-    def getConnection(self):
+    def getConnection(self,username='ubuntu'):
         print 'Attempting connection to',self.ip
-        return SshConnection(self.ip,"ubuntu",useKey=True)
+        return SshConnection(self.ip,username,useKey=True)
 
-    def isActive(self):
+    def isActive(self,conf=None):
         self.instance = self.novaobj.servers.get(self.instance.id)
         status = self.instance.status
-        while status == 'BUILD':
+        while status == 'BUILD' or status == 'REBOOT':
             print 'Current VM Status : ',status
-            time.sleep(5)
+            time.sleep(1)
             self.instance = self.novaobj.servers.get(self.instance.id)
             status = self.instance.status
-
         if (status != 'ACTIVE'):
             print 'VM Status : ',status
             return False
-
         print 'VM is ACTIVE'
         return True
 
+    def rebootInstance(self):
+        print 'Performing a reboot on the instance'
+        self.instance = self.novaobj.servers.get(self.instance.id)
+        self.instance.reboot()
+        time.sleep(60)
+        self.isActive()
+
 if __name__=='__main__':
-    conf = Configuration("openstackconfigs.conf")
+    conf = Configuration("cat.conf")
     instanceObj = openStackInstance(conf)
     instanceObj.fetchIp(conf)
     #somehow ssh connection fails without this sleep. Probably because VM is still getting ready
