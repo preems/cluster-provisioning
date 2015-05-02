@@ -4,6 +4,7 @@ from SshLib import SshConnection
 from AWSLib import AWSInstance
 from HadoopLib import installHadoop
 from Mongo import installMongoDB
+from OpenstackLib import openStackInstance
 import argparse
 import time
 
@@ -68,7 +69,7 @@ if __name__=="__main__":
 	elif args.provider=='aws':
 		CloudProvider=AWSInstance
 	elif args.provider=='openstack':
-		Cloud.provider=OpenStackInstance
+		CloudProvider=openStackInstance
 
 
 	instances=createInstances(args.nodes,CloudProvider,args.provider,conf)
