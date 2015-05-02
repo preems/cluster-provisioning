@@ -9,7 +9,7 @@ import argparse
 import time
 
 #import openstack
-OpenStackInstance=None
+#OpenStackInstance=None
 
 APP_CHOICES=['hadoop','mongodb','none']
 PROVIDER_CHOICES=['digitalocean','openstack','aws']
@@ -69,7 +69,7 @@ if __name__=="__main__":
 	elif args.provider=='aws':
 		CloudProvider=AWSInstance
 	elif args.provider=='openstack':
-		CloudProvider=OpenStackInstance
+		CloudProvider=openStackInstance
 
 	# Creating instances here
 	instances=createInstances(args.nodes,CloudProvider,args.provider,conf)
