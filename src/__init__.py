@@ -4,3 +4,4 @@ from SshLib import SshConnection
 from AWSLib import AWSInstance
 from HadoopLib import installHadoop
 from Mongo import installMongoDB
+from OpenstackLib import openStackInstance

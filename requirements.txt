@@ -1,3 +1,5 @@
 paramiko
 requests
 boto
+python-keystoneclient
+python-novaclient
