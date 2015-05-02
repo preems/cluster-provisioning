@@ -5,7 +5,7 @@ A cluster automation tool which creates multi node hadoop clusters and sharded M
 ## Installation
 
     # Install Dependencies
-    $ pip install -r requirements.txt
+    $ sudo pip install -r requirements.txt
     $ cp cat-template.conf cat.conf
   
   # Enter Authentication tokens and customize the configurations.
