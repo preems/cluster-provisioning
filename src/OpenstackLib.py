@@ -90,9 +90,10 @@ class openStackInstance(object):
         instance_name = instance_name+(str(name_index+1))
         # Creating the instance
         self.instance = self.novaobj.servers.create(name=instance_name,image=self.image_name,flavor=self.flavor, key_name=keyname)
-
         # Checking the instance
         self.isActive()
+        # Allocating external IP
+        self.fetchIp()
 
     def createRules(self):
         isSshRulePresent = False
