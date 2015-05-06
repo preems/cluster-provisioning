@@ -125,10 +125,14 @@ def performRootoperations(con, type=type, master=None, slaves=None):
     con.run('sudo chown  '+hadoopUser+":hadoop /home/"+hadoopUser+"/.ssh")
     con.run('sudo chown  '+hadoopUser+":hadoop /home/"+hadoopUser+"/.ssh/authorized_keys")
     #End add keys
+    #Chmod for /etc/environment - preems
+    con.run('sudo chmod 777 /etc/environment')
     con.run('echo "JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64" >> /etc/environment')
     if type == "master":
         con.run("sudo apt-get -y install expect")
 
+    #Chmod for /etc/hosts - preems
+    con.run('sudo chmod 777 /etc/hosts')
     updateHostsFile(con, type=type, master=master, slaves=slaves)
     con.close()
 
@@ -148,6 +152,8 @@ def updateHostsFile(con, type="master", master=None, slaves=None):
         con.run('sudo echo "' + master +'\tmaster" >> /etc/hosts')
         con.run('sudo echo "' + con.host +'\t' + type +'" >> /etc/hosts')
 
+    #Chmod for /etc/hosts.allow - preems
+    con.run('sudo chmod 777 /etc/hosts.allow')   
     con.run('sudo echo "sshd: ALL" >> /etc/hosts.allow')
 
 def installHadoop(master,slaves,conf):
